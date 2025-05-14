@@ -1,5 +1,5 @@
 # WiFi sta on thingy91x_nRF5340
-Setup for running the WiFi station example on the Thingy91x with nRF5340.
+Setup for running the WiFi station example on the Thingy91x with nRF5340 while the nRF9151 is on.
 
 ## User Configurations
 The settings for this demo are defined in the `prj.conf` file.
@@ -15,10 +15,19 @@ CONFIG_WIFI_CREDENTIALS_STATIC_PASSWORD="YourPassword"
 ```
 
 ## Building and Running the Project
-Before running the project the **nRF9151** must be wiped to free up the external flash and the nRF7002.
-To do this, connect the power and debuggers to the Thingy:91x, ensure switch 2 is set to the nRF91 target, and erase the flash using erase all in nrf connect programmer.
+#### nRF9151
+To build the project for the nRF9151 with the external flash disabled, use the nrf9151dk target to avoid the static partitioning setup for the thingy91x.
 
-Before flashing the project, ensure that switch 2 is set to the nRF5340 target.
+Because we are using the nrf9151dk target instead of the thingy91x target, we need to make necessary changes in the board overlay file `boards/nrf9151dk_nrf5340_ns.overlay`. In this sample only the configuration for the leds, button and uart0 are modified to work on the thingy91x.
+
+Before flashing the nRF9151, ensure that switch 2 is set to the nRF9151 target.
+```
+west build -p -b nrf9151dk/nrf9151/ns
+west flash --erase
+```
+
+
+Before flashing the nRF5340, ensure that switch 2 is set to the nRF5340 target.
 ```
 west build -p -b thingy91x/nrf5340/cpuapp
 west flash --erase
